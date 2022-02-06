@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    // "lib": [],
+    "useDefineForClassFields": true,
+    "module": "commonjs",
+    "resolveJsonModule": true,                        /* jsonファイルから型解決した状態で値を取得できる */
+    "moduleResolution": "node",
+    "importsNotUsedAsValues": "error",                /* 型定義ファイルのimportを（import type { hoge } from "./hoge";）で定義 */
+
+    /* Emit */
+    "outDir": "./build",                              /* Specify an output folder for all emitted files. */
+    "removeComments": true,                           /* Disable emitting comments. */
+    "noEmitOnError": true,                            /* エラーがあるときに、JavaScript ソースコードやソースマップファイル、型定義ファイルなどをコンパイラに出力させない */
+    "sourceMap": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,                          /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
+    "forceConsistentCasingInFileNames": true,         /* Ensure that casing is correct in imports. */
+
+    /* Type Checking */
+    "strict": true,                                   /* Enable all strict type-checking options. */
+    "noImplicitReturns": false,                       /* 関数の戻り値がvoid以外のときにreturnを必須 */
+    "skipLibCheck": true                              /* Skip type checking all .d.ts files. */
+  },
+  "include": ["src/**/*"]
+}

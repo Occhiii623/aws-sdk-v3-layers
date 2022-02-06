@@ -1,0 +1,46 @@
+---
+env:
+  browser: false
+  node: true
+  commonjs: false
+  es6: true
+parser: '@typescript-eslint/parser'
+plugins:
+  - '@typescript-eslint'
+extends:
+  - plugin:import/typescript
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:@typescript-eslint/recommended-requiring-type-checking
+  - prettier
+root: true
+parserOptions:
+  sourceType: module # es2015+構文のimport/exportパースで必要
+  project: ./tsconfig.json
+rules:
+  # ------- エラーの可能性 ------- 後でルールは調整します
+  'no-cond-assign': error
+  'no-dupe-args': error
+  'no-dupe-keys': error
+  'no-duplicate-case': error
+  'no-func-assign': error
+  'no-irregular-whitespace': error
+  'no-unreachable': error
+  'use-isnan': error
+  'valid-typeof': error
+  'consistent-return': warn
+  'no-global-assign': error
+  'no-lone-blocks': error
+  'no-unused-expressions': error
+  'no-useless-return': error
+  'require-await': warn
+  'no-magic-numbers': warn
+  'no-template-curly-in-string': warn
+  'eqeqeq': warn
+  'no-redeclare': warn
+  'strict': warn
+  'no-undef': off
+  'no-useless-catch': off
+globals:
+  require: false
+  module: false
