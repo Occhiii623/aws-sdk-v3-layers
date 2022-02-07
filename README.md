@@ -1,6 +1,6 @@
 # AWS SDK v3 - Operation Layers
 
-`AWS SDK for JavsScript v3`での操作レイヤーをTypeScriptコードで用意しています。(in progress)
+`AWS SDK for JavaScript v3`での操作レイヤーをTypeScriptコードで用意しています。(in progress)
 主にServerless開発で利用するサービス中心。自身の利用幅が広がれば拡張予定。
 Lambdaでの使用を想定しています。
 
