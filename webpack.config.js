@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     mode: 'development',
-    entry: './src/test-handler/main.ts',
+    entry: './lambda/handlers/test-handler.ts',
     target: 'node',
     output: {
         path: path.resolve(__dirname, 'build'),
@@ -16,7 +16,11 @@ module.exports = {
     devtool: 'inline-source-map',
     externals: [nodeExternals()],
     resolve: {
-        extensions: ['.ts', '.js']
+        // path aliasの設定(tsconfigにも)
+        alias: {
+            '@infra': path.resolve(__dirname, 'lambda/infrastructures/'),
+            extensions: ['.ts', '.js']
+        },
     },
     module: {
         rules: [

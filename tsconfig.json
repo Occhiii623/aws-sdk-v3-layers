@@ -21,7 +21,17 @@
     /* Type Checking */
     "strict": true,                                   /* Enable all strict type-checking options. */
     "noImplicitReturns": false,                       /* 関数の戻り値がvoid以外のときにreturnを必須 */
-    "skipLibCheck": true                              /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                              /* Skip type checking all .d.ts files. */
+
+    /* Path Aliasの設定 */
+    "baseUrl": "./",
+    "paths": {
+      "@infra/*": [
+        "lambda/infrastructures/*"
+      ]
+    }
   },
-  "include": ["src/**/*"]
+  "include": [
+    "lambda/**/*"
+  ]
 }

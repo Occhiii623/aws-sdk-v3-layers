@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --fix \"src/**/*.ts\" --ignore-path .gitignore",
-    "fix": "prettier --write \"src/**/*.ts\" && npm run lint",
+    "lint": "eslint --fix \\\"lambda/**/*.ts\\\" --ignore-path .gitignore",
+    "fix": "prettier --write \\\"lambda/**/*.ts\\\" && npm run lint",
     "build": "npm run fix && webpack"
   },
   "devDependencies": {
