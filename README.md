@@ -14,3 +14,30 @@ src
      ├─sqs
      └─etc...
 ```
+
+## Docker設定 (localstack)
+
+- LocalStack起動
+```
+$ docker-compose up -d
+```
+
+- LocalStack終了
+```
+$ docker-compose down
+```
+
+- ログの確認
+```
+$ docker-compose logs
+```
+
+- ボリュームが不要になったら削除
+```
+$ docker volume ls // ボリューム一覧確認
+RIVER    VOLUME NAME
+local     localstack_localstack
+
+$ docker volume rm localstack_localstack
+localstack_localstack
+```

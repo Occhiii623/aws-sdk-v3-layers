@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
+    image: localstack/localstack
+    ports:
+      - "4566:4566" # サービスへのアクセスポート
+    environment:
+      - SERVICES=s3,lambda,dynamodb,sqs,sts,eventbridge
+      - DEFAULT_REGION=ap-northeast-1
+      - DEBUG=${DEBUG-}
+      - DATA_DIR=/tmp/localstack/data # S3などのデータ永続化
+      # Lambda関数ごとにdockerコンテナが作成され、同じLambda関数を実行するたびにコンテナが作成されるのを防ぐためにdocker-reuseを指定
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_DOCKER_NETWORK=host # LocalStack上のコンテナで実行するようにする為
+    volumes:
+      - ./localstack:/tmp/localstack/ # localstackコンテナ内Volumeとホスト側Dirをマウント
