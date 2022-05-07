@@ -5,9 +5,9 @@ services:
     container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
     image: localstack/localstack
     ports:
-      - "4566:4566" # サービスへのアクセスポート
+      - "4566:4566" # access port
     environment:
-      - SERVICES=s3,lambda,dynamodb,sqs,sts,eventbridge
+      - SERVICES=cloudformation,s3,src,dynamodb,sqs,sts,eventbridge
       - DEFAULT_REGION=ap-northeast-1
       - DEBUG=${DEBUG-}
       - DATA_DIR=/tmp/localstack/data # S3などのデータ永続化
@@ -16,3 +16,4 @@ services:
       - LAMBDA_DOCKER_NETWORK=host # LocalStack上のコンテナで実行するようにする為
     volumes:
       - ./localstack:/tmp/localstack/ # localstackコンテナ内Volumeとホスト側Dirをマウント
+      - /var/run/docker.sock:/var/run/docker.sock
