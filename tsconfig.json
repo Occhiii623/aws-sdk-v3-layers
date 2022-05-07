@@ -9,7 +9,7 @@
     "importsNotUsedAsValues": "error",                /* 型定義ファイルのimportを（import type { hoge } from "./hoge";）で定義 */
 
     /* Emit */
-    "outDir": "./build",                              /* Specify an output folder for all emitted files. */
+    "outDir": "./build",                              /* Specify an output folder for all emitted data. */
     "removeComments": true,                           /* Disable emitting comments. */
     "noEmitOnError": true,                            /* エラーがあるときに、JavaScript ソースコードやソースマップファイル、型定義ファイルなどをコンパイラに出力させない */
     "sourceMap": true,
@@ -21,17 +21,18 @@
     /* Type Checking */
     "strict": true,                                   /* Enable all strict type-checking options. */
     "noImplicitReturns": false,                       /* 関数の戻り値がvoid以外のときにreturnを必須 */
-    "skipLibCheck": true,                              /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                              /* Skip type checking all .d.ts data. */
 
     /* Path Aliasの設定 */
-    "baseUrl": "./",
-    "paths": {
-      "@infra/*": [
-        "lambda/infrastructures/*"
-      ]
-    }
-  },
-  "include": [
-    "lambda/**/*"
-  ]
+//    "baseUrl": "./",
+//    "paths": {
+//      "@infra/*": [
+//        "src/infrastructures/*"
+//      ],
+//      "@cdk/*": [
+//        "cdk/*"
+//      ]
+//    }
+    "typeRoots": ["./global.d.ts", "./node_modules/@types"]
+  }
 }
