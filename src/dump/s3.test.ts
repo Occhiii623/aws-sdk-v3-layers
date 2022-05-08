@@ -1,9 +1,16 @@
+/**
+ * Memo -
+ * aws-sdk-client-mock利用の試験的なテストコード
+ * Mockでの利用はサービスへのアクセスを必要としない。
+ * AWSサービスとの疎通テストを行う目的の為、LocalStackでのテストをメインとする
+ */
+
 /***************************************************************
  * Modules
  ***************************************************************/
 import fs from 'fs';
 import path from 'path';
-import { S3Serializer } from '../../infrastructures/s3';
+import { S3Serializer } from '../infrastructures/s3';
 import { mockClient } from 'aws-sdk-client-mock';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import type { PutObjectCommandInput } from '@aws-sdk/client-s3';
@@ -12,7 +19,6 @@ dotenv.config();
 
 // create Mock Instance
 const s3Mock = mockClient(S3Client);
-jest.setTimeout(30000);
 
 /***************************************************************
  * Functions
@@ -22,7 +28,7 @@ jest.setTimeout(30000);
 const s3 = new S3Serializer('ap-northeast-1');
 const bucketName = process.env.S3_BUCKET;
 
-async function getObject(bucketName: string, objectName: string) {
+const getObject = async (bucketName: string, objectName: string) => {
   try {
     const file = await s3.get(bucketName, objectName);
     if (!file) return 'NG';
@@ -33,7 +39,7 @@ async function getObject(bucketName: string, objectName: string) {
       throw err;
     }
   }
-}
+};
 
 const getBinaryObject = async (bucketName: string, objectName: string) => {
   try {
@@ -74,7 +80,7 @@ beforeEach(() => {
   s3Mock.reset();
 });
 
-describe('正常系テスト', () => {
+describe('S3 - 正常系テスト', () => {
   // テスト用に使用するオブジェクト名
   const objName = 'DummyObjectKey';
 
@@ -115,7 +121,7 @@ describe('正常系テスト', () => {
   });
 
   describe('S3バケットに対してオブジェクトを保存できること', () => {
-    const putFileName = process.env.TEST_OBJECT_NAME;
+    const putFileName = process.env.PUT_OBJECT_NAME;
     const data = fs.createReadStream(path.resolve(__dirname, './data/dummy.png'));
     it('成功', async () => {
       s3Mock

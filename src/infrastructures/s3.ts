@@ -4,10 +4,12 @@ import {
   PutObjectCommand,
   HeadBucketCommand,
   HeadObjectCommand,
-  CreateBucketCommand
+  CreateBucketCommand,
+  DeleteObjectCommand
 } from '@aws-sdk/client-s3';
 import type { S3ClientConfig, GetObjectRequest, PutObjectCommandInput } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type { Readable } from 'stream';
 
 type Credentials = {
   accessKeyId: string;
@@ -72,7 +74,7 @@ export class S3Serializer {
   }
 
   /**
-   * S3バケットから指定したファイルを取得する
+   * S3バケットから指定したテキストデータを取得する
    */
   async get(bucketName: string, objectName: string) {
     try {
@@ -80,9 +82,10 @@ export class S3Serializer {
         Bucket: bucketName,
         Key: objectName
       };
-      const output = await this.s3.send(new GetObjectCommand(params));
-      // Convert Body from a Buffer to a String.
-      return output.Body?.toString();
+      const { Body } = await this.s3.send(new GetObjectCommand(params));
+      // v3ではBody.toString()でのテキスト抽出ができない為、Streamを変換します
+      const body: Readable = Body as Readable;
+      return Buffer.from(await body.read()).toString();
     } catch (err) {
       console.error('S3からオブジェクト取得中に例外発生', err);
       throw err;
@@ -100,9 +103,9 @@ export class S3Serializer {
         Key: objectName
       };
 
-      const output = await this.s3.send(new GetObjectCommand(params));
-      // return Body as a Buffer
-      return output.Body;
+      const { Body } = await this.s3.send(new GetObjectCommand(params));
+      const body: Readable = Body as Readable;
+      return Buffer.from(await body.read());
     } catch (err) {
       console.error('S3からオブジェクト取得中に例外発生', err);
     }
@@ -127,6 +130,18 @@ export class S3Serializer {
       StorageClass: storageClass
     };
     return this.s3.send(new PutObjectCommand(params));
+  }
+
+  /**
+   * S3バケットから指定したオブジェクトを削除する
+   */
+  delete(bucketName: string, objectName: string) {
+    return this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: bucketName,
+        Key: objectName
+      })
+    );
   }
 
   /**
