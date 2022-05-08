@@ -8,5 +8,6 @@ namespace NodeJS {
     readonly PUT_OBJECT_NAME: string;
     readonly AWS_REGION: string;
     readonly QUEUE_NAME: string;
+    readonly BASE_ENDPOINT: string;
   }
 }

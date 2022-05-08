@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Memo - 署名付きURL発行はaws-sdk-client-mockで非対応のためLocalStack使用
+ * Memo -
  * -- STEP --
  * 1) start LocalStack `docker-compose up -d` in Root
  * 2) `tsc src/infrastructures/s3.ts`
@@ -32,8 +32,6 @@ describe('S3 - 正常系テスト', () => {
    * 前準備
    */
   beforeAll(async () => {
-    console.log('start initial setup...');
-
     // テスト用のバケットがない場合は作成
     if (!(await s3.exists(bucketName))) {
       await s3.createBucket(bucketName);
@@ -59,7 +57,6 @@ describe('S3 - 正常系テスト', () => {
    * 後処理
    */
   afterAll(async () => {
-    console.log('clean up after the test.');
     // テストで保存したオブジェクトを削除
     if (await s3.exists(bucketName, putTargetObject)) {
       await s3.delete(bucketName, putTargetObject);

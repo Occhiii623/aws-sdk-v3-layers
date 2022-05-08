@@ -9,7 +9,9 @@ export class Sqs {
     this.baseUrl = baseUrl;
     this.Sqs = new SQSClient({
       apiVersion: '2012-11-05',
-      region: region
+      region: region,
+      // ! Add to test on LocalStack (#endpoint)
+      endpoint: 'http://localhost:4566'
     });
   }
 
@@ -21,16 +23,11 @@ export class Sqs {
    * @param groupId - メッセージグループID
    * @param duplicationId - メッセージ重複排除ID
    */
-  sendMessage(queueName: string, message: string, delaySec?: number, groupId?: string, duplicationId?: string) {
-    let delay = 0;
-    if (delaySec) {
-      delay = delaySec;
-    }
-
+  sendMessage(queueName: string, message: string, delaySec = 0, groupId?: string, duplicationId?: string) {
     const params: SendMessageRequest = {
       MessageBody: message,
       QueueUrl: `${this.baseUrl}/${queueName}`,
-      DelaySeconds: delay
+      DelaySeconds: delaySec
     };
 
     if (groupId) {
@@ -48,7 +45,7 @@ export class Sqs {
    * @param maxMessageNum - 最大受信数
    * @param time - 可視性タイムアウト(秒)
    */
-  getMessage(queueName: string, maxMessageNum?: number, time?: number) {
+  receiveMessage(queueName: string, maxMessageNum?: number, time?: number) {
     let maxReceiveMessages = 1;
     let visibilityTimeout = 40;
 
