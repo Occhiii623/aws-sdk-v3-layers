@@ -23,6 +23,7 @@ export class Sqs {
    * @param groupId - メッセージグループID
    * @param duplicationId - メッセージ重複排除ID
    */
+  // eslint-disable-next-line no-magic-numbers
   sendMessage(queueName: string, message: string, delaySec = 0, groupId?: string, duplicationId?: string) {
     const params: SendMessageRequest = {
       MessageBody: message,

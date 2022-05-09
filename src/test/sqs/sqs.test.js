@@ -1,21 +1,10 @@
-'use strict';
-
-/**
- * Memo -
- * -- STEP --
- * 1) start LocalStack `docker-compose up -d` in Root
- * 2) `tsc src/infrastructures/sqs.ts`
- * 3) `yarn test src/test/sqs/sqs.test.js`
- */
-
-const { Sqs } = require('../../infrastructures/sqs.js');
+const { Sqs } = require('../../build/sqs');
 const {
   SQSClient,
   CreateQueueCommand,
   ListQueuesCommand,
   DeleteQueueCommand,
-  GetQueueAttributesCommand,
-  GetQueueAttributesCommandInput
+  GetQueueAttributesCommand
 } = require('@aws-sdk/client-sqs');
 require('dotenv').config();
 
@@ -74,6 +63,7 @@ describe('SQS - 正常系テスト', () => {
   /**
    * 前準備
    */
+  let receiptHandle;
   beforeAll(async () => {
     // テスト用のキューがない場合は作成
     const result = await _getListQueue(targetQueueName);
@@ -107,14 +97,14 @@ describe('SQS - 正常系テスト', () => {
 
   it('指定したキューからメッセージを受信できること', async function () {
     const res = await sqs.receiveMessage(targetQueueName, 1, 30);
-
+    receiptHandle = res.Messages[0].ReceiptHandle;
     expect(res.$metadata.httpStatusCode).toBe(200);
     expect(res.Messages.length).toBe(1);
     expect(res.Messages[0].Body).toBe('Hello World ;)');
   });
 
-  /*  it('指定したメッセージを削除できること', async function () {
+  it('指定したメッセージを削除できること', async function () {
     const res = await sqs.deleteMessage(targetQueueName, receiptHandle);
     expect(res.$metadata.httpStatusCode).toBe(200);
-  });*/
+  });
 });

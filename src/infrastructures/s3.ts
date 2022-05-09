@@ -20,9 +20,7 @@ type Credentials = {
 export class S3Serializer {
   private readonly s3: S3Client;
   constructor(readonly region: string, assumeRoleCredential?: Credentials) {
-    let params: S3ClientConfig;
-
-    params = {
+    const params: S3ClientConfig = {
       apiVersion: '2006-03-01',
       region: region,
       // ! Add to test on LocalStack (#endpoint & #forcePathStyle)
@@ -85,6 +83,7 @@ export class S3Serializer {
       const { Body } = await this.s3.send(new GetObjectCommand(params));
       // v3ではBody.toString()でのテキスト抽出ができない為、Streamを変換します
       const body: Readable = Body as Readable;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return Buffer.from(await body.read()).toString();
     } catch (err) {
       console.error('S3からオブジェクト取得中に例外発生', err);
@@ -105,6 +104,7 @@ export class S3Serializer {
 
       const { Body } = await this.s3.send(new GetObjectCommand(params));
       const body: Readable = Body as Readable;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return Buffer.from(await body.read());
     } catch (err) {
       console.error('S3からオブジェクト取得中に例外発生', err);

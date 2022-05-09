@@ -17,6 +17,7 @@ import type {
   ScanCommandInput
 } from '@aws-sdk/lib-dynamodb';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type KeyType = {
   [p: string]: any;
 };
@@ -35,7 +36,9 @@ export class DynamoSerializer {
   constructor(region: string) {
     const dbClient = new DynamoDBClient({
       apiVersion: '2012-08-10',
-      region: region
+      region: region,
+      // ! Add to test on LocalStack (#endpoint)
+      endpoint: 'http://localhost:4566'
     });
 
     const marshallOptions = {
@@ -184,6 +187,7 @@ export class DynamoSerializer {
 
       let results: any[] = [];
       let lastEvaluatedKey = null;
+      /* eslint-enable */
 
       do {
         const output = await this.client.send(new ScanCommand(params));

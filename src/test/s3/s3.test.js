@@ -1,14 +1,4 @@
-'use strict';
-
-/**
- * Memo -
- * -- STEP --
- * 1) start LocalStack `docker-compose up -d` in Root
- * 2) `tsc src/infrastructures/s3.ts`
- * 3) `yarn test src/test/s3/s3.test.js`
- */
-
-const { S3Serializer } = require('../../infrastructures/s3.js');
+const { S3Serializer } = require('../../build/s3');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();

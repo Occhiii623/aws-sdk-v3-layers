@@ -9,5 +9,6 @@ namespace NodeJS {
     readonly AWS_REGION: string;
     readonly QUEUE_NAME: string;
     readonly BASE_ENDPOINT: string;
+    readonly TABLE_NAME: string;
   }
 }
