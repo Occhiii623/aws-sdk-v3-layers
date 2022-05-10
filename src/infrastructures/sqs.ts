@@ -11,7 +11,8 @@ export class Sqs {
       apiVersion: '2012-11-05',
       region: region,
       // ! Add to test on LocalStack (#endpoint)
-      endpoint: 'http://localhost:4566'
+      endpoint: 'http://localhost:4566',
+      credentials: { accessKeyId: 'dummy', secretAccessKey: 'dummy' }
     });
   }
 

@@ -7,7 +7,7 @@ require('dotenv').config();
  * Constants
  ***************************************************************/
 
-const s3 = new S3Serializer(process.env.AWS_REGION);
+const s3 = new S3Serializer(process.env.AWS_REGION, { accessKeyId: 'dummy', secretAccessKey: 'dummy' });
 const bucketName = process.env.S3_BUCKET;
 const imageName = process.env.GET_IMAGE_NAME;
 const textFileName = process.env.GET_TEXT_NAME;

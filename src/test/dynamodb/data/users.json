@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "001",
+      "group": "group1",
+      "name": "Hideki"
+    },
+    {
+      "id": "002",
+      "group": "group1",
+      "name": "Yasuyuki"
+    },
+    {
+      "id": "003",
+      "group": "group2",
+      "name": "Takeshi"
+    },
+    {
+      "id": "004",
+      "group": "group2",
+      "name": "Mayumi"
+    }
+  ]
+
+}

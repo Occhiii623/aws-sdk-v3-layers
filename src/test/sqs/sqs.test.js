@@ -17,7 +17,8 @@ const targetQueueName = process.env.QUEUE_NAME;
 const queueUrl = process.env.BASE_ENDPOINT + `/${targetQueueName}`;
 const testSqs = new SQSClient({
   region: process.env.AWS_REGION,
-  endpoint: 'http://localhost:4566'
+  endpoint: 'http://localhost:4566',
+  credentials: { accessKeyId: 'dummy', secretAccessKey: 'dummy' }
 });
 
 /***************************************************************

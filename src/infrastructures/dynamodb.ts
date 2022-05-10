@@ -38,7 +38,8 @@ export class DynamoSerializer {
       apiVersion: '2012-08-10',
       region: region,
       // ! Add to test on LocalStack (#endpoint)
-      endpoint: 'http://localhost:4566'
+      endpoint: 'http://localhost:4566',
+      credentials: { accessKeyId: 'dummy', secretAccessKey: 'dummy' }
     });
 
     const marshallOptions = {
@@ -140,9 +141,11 @@ export class DynamoSerializer {
       if (typeof indexForward === 'boolean') {
         params.ScanIndexForward = indexForward;
       }
+      console.log('params', params);
 
       do {
         const output = await this.client.send(new QueryCommand(params));
+        console.log('output----->', output);
         result.Items = result.Items.concat(output.Items);
         if (output.Count) {
           recordsCount += output.Count;
@@ -157,6 +160,9 @@ export class DynamoSerializer {
           lastEvaluatedKey = null;
         }
       } while (lastEvaluatedKey);
+
+      result.Count = result.Items.length;
+      return result;
     } catch (err) {
       console.error(`${tableName}へクエリ実行中に例外発生`, err);
       throw err;
@@ -198,6 +204,8 @@ export class DynamoSerializer {
           params.ExclusiveStartKey = lastEvaluatedKey;
         }
       } while (lastEvaluatedKey);
+      // eslint-disable-next-line  @typescript-eslint/no-unsafe-return
+      return results;
     } catch (err) {
       console.error(`${tableName}へのスキャン実行中に例外発生`, err);
       throw err;
