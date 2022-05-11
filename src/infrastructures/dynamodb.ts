@@ -141,11 +141,9 @@ export class DynamoSerializer {
       if (typeof indexForward === 'boolean') {
         params.ScanIndexForward = indexForward;
       }
-      console.log('params', params);
 
       do {
         const output = await this.client.send(new QueryCommand(params));
-        console.log('output----->', output);
         result.Items = result.Items.concat(output.Items);
         if (output.Count) {
           recordsCount += output.Count;

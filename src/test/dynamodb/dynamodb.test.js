@@ -28,6 +28,32 @@ const testClient = DynamoDBDocumentClient.from(testDynamo);
  ***************************************************************/
 jest.setTimeout(10000);
 
+// 複数のユーザーレコードを登録
+function _putUsersData() {
+  const promises = [];
+  userData.items.forEach((user) => {
+    promises.push(
+      dynamo.put(tableName, {
+        id: user.id,
+        group: user.group,
+        name: user.name
+      })
+    );
+  });
+  return Promise.all(promises);
+}
+
+// テーブルのレコード数を返却
+async function _selectCount() {
+  const { Count } = await testClient.send(
+    new ScanCommand({
+      TableName: tableName,
+      Select: 'COUNT'
+    })
+  );
+  return Count;
+}
+
 describe('DynamoDB - 正常系テスト', () => {
   beforeAll(async () => {
     const { TableNames } = await testClient.send(new ListTablesCommand({}));
@@ -90,15 +116,18 @@ describe('DynamoDB - 正常系テスト', () => {
     console.log('uuid', user1_id);
     const params = {
       id: user1_id,
-      group: 'group_test',
+      group: 'group-test',
       name: 'Mayumi'
     };
     const res = await dynamo.put(tableName, params);
     expect(res.$metadata.httpStatusCode).toBe(200);
 
     const item = await dynamo.get(tableName, { id: user1_id });
-    expect(item.id).toBe(user1_id);
-    expect(item.name).toBe('Mayumi');
+    expect(item).toEqual({
+      id: user1_id,
+      group: 'group-test',
+      name: 'Mayumi'
+    });
   });
 
   it('ユーザー名を更新できること', async () => {
@@ -121,28 +150,12 @@ describe('DynamoDB - 正常系テスト', () => {
     const key = { id: user1_id };
     const res = await dynamo.delete(tableName, key);
     expect(res.$metadata.httpStatusCode).toBe(200);
-    const { Count } = await testClient.send(
-      new ScanCommand({
-        TableName: tableName,
-        Select: 'COUNT'
-      })
-    );
-    expect(Count).toBe(0);
+    const count = await _selectCount();
+    expect(count).toBe(0);
   });
 
-  it('指定したgroupに合致するユーザーのレコードを取得できること', async () => {
-    const count = 200;
-    const promises = [];
-    userData.items.forEach((user) => {
-      promises.push(
-        dynamo.put(tableName, {
-          id: user.id,
-          group: user.group,
-          name: user.name
-        })
-      );
-    });
-    await Promise.all(promises);
+  it('指定したgroupに合致するユーザーのレコードをqueryで取得できること', async () => {
+    await _putUsersData();
     // クエリでgroup1のユーザーレコードを取得する
     const condition = '#Group = :Group';
     const attr = { '#Group': 'group' };
@@ -157,5 +170,24 @@ describe('DynamoDB - 正常系テスト', () => {
       name: 'Hideki'
     });
     expect(res.Items[1].group).toBe('group1');
+  });
+
+  it('指定したgroupに合致するユーザーのレコードをscanで取得できること', async () => {
+    const count = await _selectCount();
+    if (count === 0) await _putUsersData();
+    const filter = '#group = :group';
+    const attr = {
+      '#group': 'group'
+    };
+    const value = {
+      ':group': 'group2'
+    };
+    const items = await dynamo.scan(tableName, filter, attr, value);
+    expect(items.length).toBe(2);
+    expect(items[0]).toEqual({
+      id: '003',
+      group: 'group2',
+      name: 'Takeshi'
+    });
   });
 });
